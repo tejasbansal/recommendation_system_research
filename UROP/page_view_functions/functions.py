@@ -101,7 +101,6 @@ def tag_daily_avg (df,tag):
         j = 0
         for s in df.mth_day:
             if t == s and j<len(df.index):
-                #print(df['horror_ra'].loc[j])
                 total+=df['perc'].loc[j]
                 count+=1
             j+=1
@@ -114,13 +113,15 @@ def tag_daily_avg (df,tag):
     X = np.array(df_avg[tag].values)#.tolist()
     X = preprocessing.scale(X)
     df_avg[tag+'_norm'] = X
+    df[tag+'_ravg'] = df[tag+'_norm'].rolling(window=6,center=True).mean()
     return df_avg
     
-def print_df(df_avg,tag):
-    fig = df_avg.plot(x='mth_day',y=tag+'_norm',figsize = (15,8))
+def print_df(df,tag):
+    fig = df.plot(x='mth_day',y=tag+'_norm',figsize = (15,8))
     fig.figure.savefig('graphs/daily_avg_over_yrs/'+ tag+'.pdf')
+    fig1 = df.plot(x='mth_day',y= tag+'_ravg',figsize = (15,8))
+    fig1.figure.savefig('graphs/daily_avg_over_yrs/rolling_avg/'+ tag+'_ravg.pdf')
     return 
-
 
 def unique_tags():
     df = pd.read_csv('tags.csv')
@@ -141,15 +142,11 @@ def unique_tags():
 
 #     return df
         
-def roll_avg_of_norm_val (df,tag):
-    df[tag+'_ravg'] = df[tag+'_norm'].rolling(window=6,center=True).mean()
-    fig = df.plot(x='mth_day',y= tag+'_ravg',figsize = (15,8))
-    fig.figure.savefig('graphs/daily_avg_over_yrs/rolling_avg/'+ tag+'_ravg.pdf')
 
 def best_date_of_tag (tag_array):
     from pathlib import Path
     import pandas as pd
-    root = Path('dataframe', 'daily_avg_over_yrs')
+    root = Path('dataframe', 'daily_avg_over_yrs_1')
     i = 0
     df2 = pd.DataFrame(columns=['tag','date','ravg_value'])
     for tag in tag_array:
@@ -160,3 +157,14 @@ def best_date_of_tag (tag_array):
         df2.loc[i] = [tag,date,ravg_value]
         i +=1
     return df2
+
+# FUNCTION TO CONVERT THE DATAFRAME'S HEADERS TO LOWERCASE
+# import os
+# import glob
+# path = r"C:\Users\tejas\Desktop\recommendation_system_research\UROP\page_view_functions\dataframe\daily_avg_over_yrs_1\*.csv"
+# for file in glob.glob(path):
+#     #print(file)
+#     df=pd.read_csv(file)
+#     df.columns = df.columns.str.lower()
+#     df.to_csv(file)
+# df.head()
