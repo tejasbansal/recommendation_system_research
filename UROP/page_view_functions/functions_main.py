@@ -17,7 +17,7 @@ def main():
     #     i+=1
     #     df_tag = fn.pg_views_for_a_tag(df,tag)
     #     df_perc = fn.tag_perc(df_tag,tag)
-    #     df_daily_avg = fn.tag_daily_avg(df_perc,tag)
+    #     df_daily_avg = fn.tag_daily_avg_over_years(df_perc,tag)
     #     df_daily_avg.columns = map(str.lower, df_daily_avg.columns)    
     #     df_daily_avg.to_csv('dataframe/daily_avg_over_yrs_1/'+ tag +'.csv')
     #     #fn.print_df(df_daily_avg,tag)
@@ -30,7 +30,7 @@ def main():
     print(df_tag.head)
     df_perc = fn.tag_perc(df_tag,tag)
     print(df_perc)
-    df_daily_avg = fn.tag_daily_avg(df_perc,tag)
+    df_daily_avg = fn.tag_daily_avg_over_years(df_perc,tag)
     print(df_daily_avg.head)
     fn.print_df(df_daily_avg,tag)  
     # df_daily_avg.to_csv('dataframe/daily_avg_over_yrs/'+ tag +'.csv')

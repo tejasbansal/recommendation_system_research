@@ -8,7 +8,7 @@ import numpy as np
 import gc
 from sklearn import svm, preprocessing
 
-def daily_breakdown(filename):
+def daily_breakdown(filename): # for the user movie view file
     try: 
         df = pd.read_csv(filename)
         df['tstamp'] = df['tstamp'].apply(lambda x: dt.datetime.strptime(x,'%d-%m-%Y %H:%M'))
@@ -79,7 +79,7 @@ def tag_overall_sub_avg_perc(df_perc):
     df_sub = df_perc['perc'] - avg
     return df_sub
 
-def tag_daily_avg (df,tag):
+def tag_daily_avg_over_years (df,tag):
     # df5 = pd.DataFrame(columns=['timestamp','pg_view'])
     df['timestamp'] = df['timestamp'].apply(lambda x: dt.datetime.strptime(x,'%Y-%m-%d %H:%M:%S'))
     df['mth_day'] = df['timestamp'].map(lambda x: x.strftime("%m-%d"))
@@ -113,7 +113,7 @@ def tag_daily_avg (df,tag):
     X = np.array(df_avg[tag].values)#.tolist()
     X = preprocessing.scale(X)
     df_avg[tag+'_norm'] = X
-    df[tag+'_ravg'] = df[tag+'_norm'].rolling(window=6,center=True).mean()
+    df_avg[tag+'_ravg'] = df_avg[tag+'_norm'].rolling(window=6,center=True).mean()
     return df_avg
     
 def print_df(df,tag):
